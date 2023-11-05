@@ -16,13 +16,18 @@
   <h1>Cumpleaños Mes a Mes</h1>
   {% for mes, cumpleaños in cumpleaños_por_mes.items %}
       <h2>{{ mes }}</h2>
-      <ul>
+      <div>
           {% for cumpleañero in cumpleaños %}
-              <li>{{ cumpleañero.dia_cumpleaños }} {{ cumpleañero.nombre }} {{ cumpleañero.apellido }}</li>
+          <div>
+            <h4>{{ cumpleañero.dia_cumpleaños }}</h4>
+            <p>{{ cumpleañero.nombre }} {{ cumpleañero.apellido }} {{ cumpleañero.telefono }}</p>
+            {% if cumpleañero.foto %}
+            <img src="{{ cumpleañero.foto.url }}" alt="{{ cumpleañero.nombre }} {{ cumpleañero.apellido }}">
+            {% endif %}
           {% empty %}
               <li>No hay cumpleaños este mes.</li>
           {% endfor %}
-      </ul>
+        </div>
   {% endfor %}
     
 </body>

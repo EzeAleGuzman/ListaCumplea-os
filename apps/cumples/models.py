@@ -1,10 +1,8 @@
 from django.db import models
-from django.db.models.signals import pre_save
+from django.db.models.signals import pre_save, pre_delete
 from django.dispatch import receiver
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, MaxValueValidator
-from django.db.models.signals import pre_delete
-
 
 class Cumpleañero(models.Model):
     nombre = models.CharField(max_length=30)
@@ -23,6 +21,16 @@ class Cumpleañero(models.Model):
         db_table = 'cumples'
         ordering = ['mes_cumpleaños', 'dia_cumpleaños']
 
+    def clean(self):
+        # Validar la cantidad de días en función del mes seleccionado
+        max_dias = 31  # Por defecto, 31 días
+        if self.mes_cumpleaños == 4 or self.mes_cumpleaños == 6 or self.mes_cumpleaños == 9 or self.mes_cumpleaños == 11:
+            max_dias = 30  # Meses con 30 días
+        elif self.mes_cumpleaños == 2:
+            max_dias = 29  # Febrero (asumiendo 29 días por defecto)
+
+        if self.dia_cumpleaños < 1 or self.dia_cumpleaños > max_dias:
+            raise ValidationError("El día seleccionado no es válido para el mes.")
 
 @receiver(pre_save, sender=Cumpleañero)
 def validate_cumpleaños(sender, instance, **kwargs):

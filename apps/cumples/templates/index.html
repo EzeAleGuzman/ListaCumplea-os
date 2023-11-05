@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mis Cumpleaños</title>
+</head>
+<body>
+    <h1>Cargar un Cumpleaños</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Cargar Cumpleaños</button>
+    </form>
+<hr>
+    
+    
+  <h1>Cumpleaños Mes a Mes</h1>
+  {% for mes, cumpleaños in cumpleaños_por_mes.items %}
+      <h2>{{ mes }}</h2>
+      <ul>
+          {% for cumpleañero in cumpleaños %}
+              <li>{{ cumpleañero.dia_cumpleaños }} {{ cumpleañero.nombre }} {{ cumpleañero.apellido }}</li>
+          {% empty %}
+              <li>No hay cumpleaños este mes.</li>
+          {% endfor %}
+      </ul>
+  {% endfor %}
+    
+</body>
+</html>
